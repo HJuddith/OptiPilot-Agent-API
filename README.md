@@ -90,6 +90,21 @@ RGPD propres à une entreprise de santé mentale/QVT.**
 
 ---
 
+## Le workflow sur make
+
+```
+[Note du responsable / Webhook]
+       ↓
+[Module HTTP : Appel à l'API sur Render / Groq]
+       ↓
+[Module JSON : Analyse de la réponse reçue]
+       ↓
+ ┌─────┴─────────────────────────────────┐
+ ↓                                       ↓
+[Slack : Poster le message vulgarisé]   [Google Sheets : Archiver l'analyse]
+
+```
+
 ## 🚀 Installation et exécution rapide
 
 ```bash
