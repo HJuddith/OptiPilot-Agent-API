@@ -10,6 +10,15 @@ class NoteInput(BaseModel):
 
 @app.post("/analyser")
 def analyser(payload: NoteInput):
-    raw = call_demo(payload.note, "webhook") if payload.provider == "demo" \
-        else call_groq(payload.note, "webhook")
-    return parse_and_validate(raw)
+    return {
+        "success": True,
+        "note": payload.note,
+        "provider": payload.provider
+    }
+
+
+# @app.post("/analyser")
+# def analyser(payload: NoteInput):
+#    raw = call_demo(payload.note, "webhook") if payload.provider == "demo" \
+#       else call_groq(payload.note, "webhook")
+#   return parse_and_validate(raw)
