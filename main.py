@@ -10,7 +10,7 @@ Transforme une directive brute du DG (texte / transcription de note vocale) en :
 
 Usage:
     python main.py --input samples/input_note_dg.txt --provider demo
-    python main.py --input samples/input_note_dg.txt --provider claude
+    python main.py --input samples/input_note_dg.txt --provider groq
     python main.py --input samples/input_note_dg.txt --provider mistral --output out.json
 
 Auteur: Projet portfolio — candidature Tech Ops / AI Builder, Qualisocial.
@@ -40,9 +40,9 @@ except ImportError:  # rich est optionnel, le script doit rester exécutable san
     console = None
 
 
-# --------------------------------------------------------------------------- #
+#----------------------------------------------------------------
 # 1. PROMPT SYSTÈME — cœur de l'agent OptiPilot
-# --------------------------------------------------------------------------- #
+#---------------------------------------------------------------
 
 SYSTEM_PROMPT = """Tu es OptiPilot-Agent, l'agent d'orchestration exécutif interne de Qualisocial,
 entreprise experte en santé mentale et Qualité de Vie au Travail (QVT).
