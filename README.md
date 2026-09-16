@@ -8,7 +8,7 @@ Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack/Google
 ![Aperçu](assets/ApiScreenshot.JPG)
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20Llama%203.3%2070B-f55036)
+![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20GPT_OSS%20120B-f55036)
 ![Mistral](<https://img.shields.io/badge/Fallback-Mistral%20(UE)-FF7000>)
 ![Status](https://img.shields.io/badge/Status-PoC%20fonctionnel-success)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
@@ -82,7 +82,7 @@ RGPD propres à une entreprise de santé mentale/QVT.**
 | Composant             | Choix                                       | Justification                                             |
 | --------------------- | ------------------------------------------- | --------------------------------------------------------- |
 | Langage               | Python 3.10+                                | Léger, lisible, standard en Ops/IA                        |
-| LLM principal         | Groq (Llama 3.3 70B)                        | Fiabilité du suivi d'instructions JSON strict             |
+| LLM principal         | Groq (openai/gpt-oss-120b)                  | Fiabilité du suivi d'instructions JSON strict             |
 | LLM fallback          | Mistral Large (API Mistral, hébergement UE) | Option souveraine pour données sensibles QVT              |
 | Orchestration prévue  | Make.com                                    | Cœur du poste : sans code pour les Ops, webhook-ready     |
 | Interface pédagogique | Slack Block Kit / Email HTML                | Restitution vulgarisée pour un responsable non-tech       |
