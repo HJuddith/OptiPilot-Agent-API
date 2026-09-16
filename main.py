@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from **future** import annotations
+from __future__ import annotations
 
 import argparse
 import json
@@ -213,7 +213,7 @@ return content
 
 
 def call_demo(raw_note: str, source_label: str = "script") -> str:
-base_dir = Path(**file**).resolve().parent
+base_dir = Path(__file__).resolve().parent
 
 
 sample_path = (
@@ -354,7 +354,7 @@ console.print(
         f"{sa['complexite_technique']}\n"
         f"[bold]Gain de temps estimé :[/bold] "
         f"{sa['gain_temps_estime']}",
-        title="📊 Analyse stratégique",
+        title="Analyse stratégique",
         border_style="cyan",
     )
 )
