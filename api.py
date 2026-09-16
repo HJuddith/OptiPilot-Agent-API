@@ -1,4 +1,3 @@
-```python
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
@@ -262,6 +261,6 @@ def analyser(payload: NoteInput):
                 "message": str(exc),
             },
         ) from exc
-```
+
 
 
