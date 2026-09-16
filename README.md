@@ -3,12 +3,12 @@
 **L'agent qui transforme une note vocale d'un responsable en cahier des charges Ops exploitable — en quelques secondes, pas en quelques jours.**
 Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack/Google Sheets.
 
-🔗 **Démo :** _à compléter après déploiement_ · **Code :** [_lien du dépôt_](https://github.com/HJuddith/OptiPilot-Agent)
+🔗 **Démo :** [_lien de l'API déployée_](https://optipilot-agent-api.onrender.com) · **Code :** [_lien du dépôt_](https://github.com/HJuddith/OptiPilot-Agent)
 
 ![Aperçu](assets/ApiScreenshot.JPG)
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Claude](https://img.shields.io/badge/LLM-Claude%203.5%20Sonnet-8A63D2)
+![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20Llama%203.3%2070B-f55036)
 ![Mistral](<https://img.shields.io/badge/Fallback-Mistral%20(UE)-FF7000>)
 ![Status](https://img.shields.io/badge/Status-PoC%20fonctionnel-success)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
@@ -55,7 +55,7 @@ RGPD propres à une entreprise de santé mentale/QVT.**
 │   OptiPilot-Agent (main.py)      │
 │  ┌─────────────────────────────┐ │
 │  │ 1. Prompt système strict    │ │
-│  │ 2. Appel LLM (Claude/Mistral)│ │
+│  │ 2. Appel LLM (Groq/Mistral)│ │
 │  │ 3. Parsing & validation JSON│ │
 │  └─────────────────────────────┘ │
 └───────────┬───────────────────────┘
@@ -82,9 +82,9 @@ RGPD propres à une entreprise de santé mentale/QVT.**
 | Composant             | Choix                                       | Justification                                             |
 | --------------------- | ------------------------------------------- | --------------------------------------------------------- |
 | Langage               | Python 3.10+                                | Léger, lisible, standard en Ops/IA                        |
-| LLM principal         | Claude Sonnet 5 (API Anthropic)             | Fiabilité du suivi d'instructions JSON strict             |
+| LLM principal         | Groq (Llama 3.3 70B)                        | Fiabilité du suivi d'instructions JSON strict             |
 | LLM fallback          | Mistral Large (API Mistral, hébergement UE) | Option souveraine pour données sensibles QVT              |
-| Orchestration prévue  | Make.com ou n8n                             | Cœur du poste : sans code pour les Ops, webhook-ready     |
+| Orchestration prévue  | Make.com                                    | Cœur du poste : sans code pour les Ops, webhook-ready     |
 | Interface pédagogique | Slack Block Kit / Email HTML                | Restitution vulgarisée pour un responsable non-tech       |
 | Format d'échange      | JSON strict, schéma versionné               | Contrat d'interface stable entre l'agent et les workflows |
 
@@ -107,7 +107,7 @@ Pour utiliser un vrai LLM plutôt que le mode démo, renseigner `ANTHROPIC_API_K
 `MISTRAL_API_KEY`) dans `.env`, puis :
 
 ```bash
-python main.py --input samples/input_note_resp.txt --provider claude --output resultat.json
+python main.py --input samples/input_note_resp.txt --provider Groq --output resultat.json
 ```
 
 ---
