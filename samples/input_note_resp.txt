@@ -1,0 +1,11 @@
+[Transcription note vocale — Romain, 14/03 08h42, en voiture]
+
+Bon euh, il faut qu'on fasse un truc sur les résultats du dernier audit QVT interne, celui qu'on a
+lancé en janvier sur les 120 collaborateurs. On a des centaines de verbatims dans le fichier Sheets
+que RH a compilé, avec les noms des gens dedans parfois cités en commentaire libre. Il faut
+absolument qu'on puisse en sortir une synthèse par pôle, genre "Sales se plaint de la charge",
+"Ops se plaint du manque d'outils", sans jamais qu'un nom de collaborateur ressorte nulle part,
+même pas dans nos fichiers de travail internes. Je veux un truc qu'on puisse montrer au Codex du
+mois prochain, direction générale, RH, sans risque. Et il faut que ça aille vite parce que le
+Codex c'est dans 3 semaines et Elise n'a pas le temps de tout relire à la main. Si possible que ça
+me remonte un résumé synthétique sur Slack pour que je valide avant que ça parte plus loin.

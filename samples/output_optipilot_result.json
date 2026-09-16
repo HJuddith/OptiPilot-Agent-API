@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "agent": "OptiPilot-Agent",
+    "version": "1.0.0",
+    "input_source": "note_vocale_dg",
+    "processed_at": "2026-03-14T08:47:12+01:00",
+    "provider": "claude-sonnet-5"
+  },
+  "strategic_analysis": {
+    "pole_cible": "RH / QVT",
+    "poles_secondaires_impactes": ["Ops", "Direction Générale"],
+    "urgence": "Haute",
+    "urgence_justification": "Deadline fixe (Codex dans 3 semaines) et dépendance à la disponibilité RH.",
+    "complexite_technique": "Moyenne",
+    "complexite_justification": "Nécessite un pipeline d'anonymisation fiable avant toute analyse, mais pas de développement d'infrastructure lourde.",
+    "gain_temps_estime": "Env. 15 à 20h de relecture manuelle RH économisées",
+    "risques_identifies": [
+      {
+        "type": "RGPD",
+        "niveau": "Élevé",
+        "description": "Les verbatims contiennent des noms de collaborateurs en commentaire libre. Toute analyse doit être précédée d'une anonymisation stricte, y compris dans les fichiers de travail internes."
+      },
+      {
+        "type": "Donnée sensible santé/QVT",
+        "niveau": "Élevé",
+        "description": "Les données d'audit QVT relèvent d'un champ sensible ; seules des synthèses agrégées par pôle doivent être diffusées, jamais de verbatim individuel identifiable."
+      }
+    ]
+  },
+  "cahier_des_charges_technique": {
+    "objectif": "Produire une synthèse agrégée et anonymisée des résultats de l'audit QVT, restituée par pôle, exploitable en Codex.",
+    "inputs": [
+      "Export Google Sheets des verbatims bruts de l'audit QVT (colonnes: pôle, commentaire libre, date)",
+      "Liste des collaborateurs (pour reconnaissance et suppression des noms cités en commentaire libre)"
+    ],
+    "processing": [
+      "Étape 1 — Anonymisation : détection et remplacement de tout nom propre / identifiant direct dans les commentaires libres (avant tout envoi à un LLM).",
+      "Étape 2 — Agrégation par pôle : regroupement des verbatims anonymisés par pôle d'origine.",
+      "Étape 3 — Synthèse thématique : extraction des thèmes récurrents par pôle (charge de travail, outillage, management, etc.).",
+      "Étape 4 — Génération du rapport de synthèse Codex, format court, sans verbatim brut."
+    ],
+    "outputs": [
+      "Document de synthèse par pôle (1 page max par pôle), 100% anonymisé",
+      "Fichier de log d'anonymisation (nombre d'occurrences supprimées, pour audit interne)",
+      "Notification Slack de validation avant diffusion au Codex"
+    ],
+    "contraintes": [
+      "Aucun nom de collaborateur ne doit apparaître, y compris dans les fichiers de travail intermédiaires.",
+      "Le traitement doit rester traçable et auditable (log d'anonymisation).",
+      "Livrable prêt avant J-3 par rapport à la date du Codex.",
+      "Validation humaine (DG et/ou RH) obligatoire avant diffusion, même après anonymisation automatique."
+    ],
+    "jalons": [
+      "J+2 : script d'anonymisation testé sur échantillon",
+      "J+7 : synthèse par pôle générée et relue par RH",
+      "J-3 avant Codex : validation finale DG"
+    ]
+  },
+  "prompt_systeme_genere": "Tu es un agent d'analyse QVT anonymisée pour Qualisocial. Tu reçois exclusivement des verbatims déjà anonymisés (aucun nom propre ne doit apparaître dans ton input ; si tu en détectes un, tu dois le signaler et refuser de le traiter tel quel). Ta mission : regrouper les verbatims par pôle fourni en métadonnée, identifier les 3 à 5 thèmes récurrents par pôle, et produire une synthèse factuelle, neutre et bienveillante, sans jamais citer un verbatim en entier ni un détail permettant de réidentifier un individu. Réponds uniquement en JSON strict avec le schéma suivant : {\"pole\": string, \"themes\": [{\"theme\": string, \"frequence_relative\": string, \"synthese\": string}], \"alerte_reidentification\": boolean}. N'ajoute aucun texte hors de ce JSON.",
+  "notification": {
+    "canal": "Slack",
+    "destinataire": "Romain Legallais (DG)",
+    "titre": "🧭 Synthèse Audit QVT prête à valider",
+    "message_vulgarise": "Salut Romain, la synthèse anonymisée de l'audit QVT par pôle est prête pour le Codex. Aucun nom ne sort nulle part, tout a été vérifié. Tu peux valider directement ci-dessous, ou demander une relecture RH avant diffusion.",
+    "actions_proposees": [
+      { "label": "✅ Valider pour le Codex", "action_id": "validate_codex" },
+      { "label": "🔍 Demander relecture RH", "action_id": "request_rh_review" },
+      { "label": "⏸️ Reporter", "action_id": "postpone" }
+    ]
+  }
+}
