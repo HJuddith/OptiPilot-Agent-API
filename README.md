@@ -1,15 +1,15 @@
 # 🧭 OptiPilot-Agent
 
 **L'agent qui transforme une note vocale d'un responsable en cahier des charges Ops exploitable — en quelques secondes, pas en quelques jours.**
-Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack/Google Sheets.
+Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack / Google Sheets.
 
-🔗 **Démo :** [_lien de l'API déployée_](https://optipilot-agent-api.onrender.com) · **Code :** [_lien du dépôt_](https://github.com/HJuddith/OptiPilot-Agent)
+🔗 **Démo interactive :** [Swagger UI](https://optipilot-agent-api.onrender.com/docs) · **Code :** [dépôt GitHub](https://github.com/HJuddith/OptiPilot-Agent)
 
 ![Aperçu](assets/ApiScreenshot.JPG)
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20GPT_OSS%20120B-f55036)
-![Mistral](<https://img.shields.io/badge/Fallback-Mistral%20(UE)-FF7000>)
+![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20GPT--OSS%20120B-f55036)
+![Mistral](https://img.shields.io/badge/Fallback-Mistral%20UE-FF7000)
 ![Status](https://img.shields.io/badge/Status-PoC%20fonctionnel-success)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
@@ -38,7 +38,7 @@ peuvent exécuter_.
 
 Ce PoC (Proof of Concept) démontre exactement les compétences attendues sur le poste : **cadrage des besoins IA,
 structuration de workflows, évangélisation par la pédagogie, et prise en compte native des enjeux
-RGPD propres à une entreprise de santé mentale/QVT.**
+RGPD propres à une entreprise de santé mentale / QVT.**
 
 ---
 
@@ -46,24 +46,24 @@ RGPD propres à une entreprise de santé mentale/QVT.**
 
 ```
 ┌──────────────────────┐
-│  Note vocale / texte  │
-│      du responsable   │
-└───────────┬───────────┘
+│  Note vocale / texte │
+│     du responsable   │
+└───────────┬──────────┘
             │
             ▼
-┌──────────────────────────────────┐
-│   OptiPilot-Agent (main.py)      │
-│  ┌─────────────────────────────┐ │
-│  │ 1. Prompt système strict    │ │
-│  │ 2. Appel LLM (Groq/Mistral)│ │
-│  │ 3. Parsing & validation JSON│ │
-│  └─────────────────────────────┘ │
+┌───────────────────────────────────┐
+│   OptiPilot-Agent (main.py)       │
+│  ┌─────────────────────────────┐  │
+│  │ 1. Prompt système strict    │  │
+│  │ 2. Appel LLM (Groq/Mistral) │  │
+│  │ 3. Parsing & validation JSON│  │
+│  └─────────────────────────────┘  │
 └───────────┬───────────────────────┘
             │  JSON structuré (contrat d'interface)
             ▼
-┌──────────────────────────────────────────┐
-│   Sortie exploitable en aval              │
-│  • strategic_analysis  → pilotage/priorisation │
+┌────────────────────────────────────────────┐
+│   Sortie exploitable en aval               │
+│  • strategic_analysis  → pilotage / prio   │
 │  • cahier_des_charges  → ticket Ops        │
 │  • prompt_systeme      → agent d'exécution │
 │  • notification        → Slack / Email     │
@@ -71,41 +71,59 @@ RGPD propres à une entreprise de santé mentale/QVT.**
             │  (webhook HTTP)
             ▼
 ┌──────────────────────────────────┐
-│   Make.com / n8n                  │
-│  Slack Block Kit • Google Sheets  │
-│  Gmail • Suivi automatisé         │
-└────────────────────────────────────┘
+│   API FastAPI (api.py)           │
+│   Déployée sur Render            │
+│   POST /analyser                 │
+└───────────┬──────────────────────┘
+            │
+            ▼
+┌──────────────────────────────────┐
+│   Make.com                       │
+│  Slack Block Kit • Google Sheets │
+│  Gmail • Suivi automatisé        │
+└──────────────────────────────────┘
 ```
+
+---
 
 ## 🛠️ Stack technique
 
 | Composant             | Choix                                       | Justification                                             |
 | --------------------- | ------------------------------------------- | --------------------------------------------------------- |
-| Langage               | Python 3.10+                                | Léger, lisible, standard en Ops/IA                        |
-| LLM principal         | Groq (openai/gpt-oss-120b)                  | Fiabilité du suivi d'instructions JSON strict             |
+| Langage               | Python 3.10+                                | Léger, lisible, standard en Ops / IA                      |
+| LLM principal         | Groq (`openai/gpt-oss-120b`)                | Fiabilité du suivi d'instructions JSON strict             |
 | LLM fallback          | Mistral Large (API Mistral, hébergement UE) | Option souveraine pour données sensibles QVT              |
+| API webhook           | FastAPI + Uvicorn                           | Auto-doc Swagger, validation Pydantic, déploiement simple |
+| Hébergement           | Render (free tier)                          | Zéro configuration, redéploiement auto sur `git push`     |
 | Orchestration prévue  | Make.com                                    | Cœur du poste : sans code pour les Ops, webhook-ready     |
 | Interface pédagogique | Slack Block Kit / Email HTML                | Restitution vulgarisée pour un responsable non-tech       |
 | Format d'échange      | JSON strict, schéma versionné               | Contrat d'interface stable entre l'agent et les workflows |
 
 ---
 
-## Le workflow sur make
+## 🔄 Le workflow sur Make
 
 ```
 [Note du responsable / Webhook]
        ↓
-[Module HTTP : Appel à l'API sur Render / Groq]
+[Module HTTP : POST /analyser sur Render]
        ↓
-[Module JSON : Analyse de la réponse reçue]
+[Module JSON : Parse de la réponse]
        ↓
- ┌─────┴─────────────────────────────────┐
- ↓                                       ↓
+ ┌─────┴──────────────────────────────────┐
+ ↓                                        ↓
 [Slack : Poster le message vulgarisé]   [Google Sheets : Archiver l'analyse]
-
 ```
 
+Le workflow est **duplicable sur les 5 pôles** (Sales, Marketing, Ops, RH, Finance) sans
+réécrire l'orchestration : l'API expose un contrat JSON stable, chaque scénario Make n'a qu'à
+consommer les champs qui l'intéressent.
+
+---
+
 ## 🚀 Installation et exécution rapide
+
+### En local (mode CLI)
 
 ```bash
 # 1. Installer les dépendances
@@ -118,11 +136,35 @@ cp .env.example .env
 python main.py --input samples/input_note_resp.txt --provider demo
 ```
 
-Pour utiliser un vrai LLM plutôt que le mode démo, renseigner `ANTHROPIC_API_KEY` (ou
+**Pour utiliser un vrai LLM** plutôt que le mode démo, renseigne `GROQ_API_KEY` (ou
 `MISTRAL_API_KEY`) dans `.env`, puis :
 
 ```bash
-python main.py --input samples/input_note_resp.txt --provider Groq --output resultat.json
+# Avec Groq (openai/gpt-oss-120b)
+python main.py --input samples/input_note_resp.txt --provider groq --output resultat.json
+
+# Avec Mistral (option souveraine UE)
+python main.py --input samples/input_note_resp.txt --provider mistral --output resultat.json
+```
+
+### Via l'API (mode webhook, pour Make / n8n)
+
+```bash
+# Démarrer l'API en local
+uvicorn api:app --reload --port 8000
+
+# Tester l'endpoint
+curl -X POST http://localhost:8000/analyser \
+  -H "Content-Type: application/json" \
+  -d '{"note":"Test de directive","provider":"demo"}'
+```
+
+Puis ouvre **http://localhost:8000/docs** pour l'interface Swagger interactive.
+
+**En production**, l'API est déployée sur Render :
+
+```
+https://optipilot-agent-api.onrender.com/analyser
 ```
 
 ---
@@ -131,10 +173,10 @@ python main.py --input samples/input_note_resp.txt --provider Groq --output resu
 
 **Entrée** (`samples/input_note_resp.txt`) — note vocale informelle du responsable à propos de l'audit QVT :
 
-> _"Bon euh, il faut qu'on fasse un truc sur les résultats du dernier audit QVT interne [...]
-> il faut absolument qu'on puisse en sortir une synthèse par pôle [...] sans jamais qu'un nom de
-> collaborateur ressorte nulle part [...] ça me remonte un résumé synthétique sur Slack pour que
-> je valide."_
+> _"Bon euh, il faut qu'on fasse un truc sur les résultats du dernier audit QVT interne [...]_
+> _il faut absolument qu'on puisse en sortir une synthèse par pôle [...] sans jamais qu'un nom de_
+> _collaborateur ressorte nulle part [...] ça me remonte un résumé synthétique sur Slack pour que_
+> _je valide."_
 
 **Sortie** (`samples/output_optipilot_result.json`) — extrait :
 
@@ -172,29 +214,44 @@ python main.py --input samples/input_note_resp.txt --provider Groq --output resu
 
 ```
 OptiPilot-Agent/
-├── main.py      # Script principal
-├── api.py
-├── assets       # Captures d'ecran de l'api, scénario make, google sheet, ....
-├── requirements.txt                 # Dépendances Python
-├── .env.example                     # Template de configuration
+├── main.py                         # Script principal (CLI + logique LLM)
+├── api.py                          # API FastAPI (webhook pour Make)
+├── requirements.txt                # Dépendances Python
+├── .env.example                    # Template de configuration
 ├── .gitignore
 ├── README.md
+├── assets/                         # Captures d'écran (API, Make, Slack, Sheets)
 ├── docs/
-│   ├── CAHIER_DES_CHARGES.md        # Spécifications complètes du PoC (Proof of Concept)
+│   └── CAHIER_DES_CHARGES.md       # Spécifications complètes du PoC
 └── samples/
-    ├── input_note_resp.txt            # Exemple de note brute du duresponsable
+    ├── input_note_resp.txt         # Exemple de note brute du responsable
     └── output_optipilot_result.json # Exemple de résultat structuré
 ```
+
+---
+
+## 🔒 Sécurité & bonnes pratiques
+
+Dès la première version de l'API, plusieurs garde-fous ont été mis en place :
+
+| Mesure                                           | Objectif                                           |
+| ------------------------------------------------ | -------------------------------------------------- |
+| Limite de taille sur `note` (20 000 caractères)  | Anti-DoS                                           |
+| Vérification de taille en entrée/sortie          | Éviter les abus mémoire                            |
+| Refus d'écriture hors du répertoire courant      | Path traversal                                     |
+| Messages d'erreur génériques côté client         | Ne jamais exposer de secrets dans les logs publics |
+| Clés API uniquement en variables d'environnement | Aucune clé dans le code ou le dépôt                |
+| Timeouts explicites sur les appels LLM           | Éviter les blocages indéfinis                      |
 
 ---
 
 ## 💡 Impact métier & vision Tech Ops
 
 **Santé mentale et bienveillance dans le ton.** Le prompt système impose explicitement un ton
-factuel et bienveillant dans les notifications générées — cohérent avec le fait que Qualisocial
-s'adresse à des équipes dans un contexte de santé mentale au travail. Un agent qui "évangélise"
-l'IA dans ce type d'entreprise doit d'abord démontrer qu'il respecte cette sensibilité, pas
-seulement la performance technique.
+factuel et bienveillant dans les notifications générées — cohérent avec le fait qu'une entreprise
+de QVT s'adresse à des équipes dans un contexte de santé mentale au travail. Un agent qui
+"évangélise" l'IA dans ce type d'entreprise doit d'abord démontrer qu'il respecte cette sensibilité,
+pas seulement la performance technique.
 
 **Pédagogie pour les non-tech.** La sortie de l'agent sépare volontairement le _technique_ (cahier
 des charges, prompt système) du _vulgarisé_ (notification Slack). C'est la même logique que
@@ -204,7 +261,7 @@ pas juste fonctionnelle.
 **RGPD comme réflexe, pas comme case à cocher.** Le cas d'usage démonstrateur choisi
 (anonymisation d'un audit QVT) n'est pas anodin : il force le pipeline à intégrer la
 minimisation des données et la détection de risque _dans le code_, avant tout appel LLM —
-exactement le type de garde-fou attendu pour manipuler des données de santé mentale/QVT.
+exactement le type de garde-fou attendu pour manipuler des données de santé mentale / QVT.
 
 **Passage à l'échelle Ops.** Le JSON de sortie est pensé comme un **contrat d'interface stable**
 : n'importe quel scénario Make ou workflow n8n peut le consommer via un simple module HTTP/Webhook,
@@ -213,13 +270,82 @@ sur les 5 pôles (Sales, Marketing, Ops, RH, Finance) sans réécrire l'orchestr
 
 ---
 
-## 🗺️ Roadmap (au-delà du PoC)
+## 🎓 Ce que j'ai appris
 
-- [ ] API FastAPI autour de `main.py` pour exposition en webhook direct (Make → HTTP POST)
-- [ ] Boutons Slack réellement interactifs (Slack Interactivity + endpoint d'écoute des actions)
-- [ ] Historique des directives traitées dans Google Sheets (tableau de bord pour le responsable)
-- [ ] Anonymisation locale (regex + NER léger) en amont de l'appel LLM, pour renforcer le principe
-      de minimisation des données avant tout envoi externe
+- **Migration LLM en production.** Le retrait du modèle `llama-3.3-70b-versatile` par Groq
+  (16 août 2026) m'a obligé à mettre en place une gestion de modèle par variable d'environnement
+  (`GROQ_MODEL`), pour pouvoir basculer sans redéployer le code. Leçon : ne jamais hardcoder un
+  nom de modèle dans le code.
+- **Contrat d'interface JSON.** Définir un schéma strict en amont m'a évité de casser le workflow
+  Make à chaque évolution du prompt. Le code peut changer, le contrat reste.
+- **Sécurité dès le PoC.** Limite de taille d'entrée, refus d'écriture hors cwd, messages
+  d'erreur génériques côté client : des réflexes à appliquer dès la première version, pas en
+  rustine après coup.
+- **Cold start en free tier.** Découverte du comportement de Render : le service s'endort
+  après 15 min d'inactivité. Impact réel sur les webhooks qui ont un timeout court.
+
+---
+
+## ⚠️ Limites connues du PoC
+
+- **Cold start Render (free tier).** 30 à 60 secondes après 15 minutes d'inactivité. Contourné
+  en prod par un ping régulier sur `/health`, ou en passant au tier payant.
+- **Anonymisation côté LLM uniquement.** La détection RGPD est faite par le prompt, pas par un
+  NER local. Un vrai passage en production exigerait un pré-traitement local.
+- **Boutons Slack non interactifs.** Les actions proposées sont affichées, mais les clics ne
+  déclenchent pas encore d'endpoint. Voir roadmap.
+- **Quotas Groq gratuits.** 1 000 requêtes/jour — suffisant pour un PoC, pas pour un usage réel.
+- **Mono-tenant.** Un seul canal Slack, un seul Google Sheet. La version multi-pôles est
+  envisagée mais pas implémentée.
+
+---
+
+## 🗺️ Roadmap
+
+### ✅ Déjà livré
+
+- [x] CLI `main.py` (providers demo / groq / mistral)
+- [x] API FastAPI exposée en webhook (`POST /analyser`)
+- [x] Déploiement Render (free tier)
+- [x] Détection RGPD native dans le prompt système
+- [x] Sécurisation de l'API (limites, path traversal, erreurs génériques)
+
+### 🚧 En cours
+
+- [ ] Workflow Make : Slack + Google Sheets de bout en bout
+- [ ] Boutons Slack réellement interactifs (Slack Interactivity + endpoint `/actions`)
+- [ ] Transcription vocale automatique (Whisper) en entrée
+
+### 🔮 Au-delà du PoC
+
+- [ ] Anonymisation locale (regex + NER léger) avant appel LLM
+- [ ] Tableau de bord historique (Metabase ou Looker Studio)
+- [ ] Multi-tenant : un canal Slack par pôle, un Sheet par pôle
+- [ ] Tests automatisés (pytest + GitHub Actions)
+- [ ] Rate limiting applicatif côté API
+
+---
+
+## 🧪 Tests
+
+```bash
+# Vérification syntaxe
+python -m py_compile main.py api.py
+
+# Lint
+python -m ruff check main.py api.py
+
+# Test manuel API en local
+uvicorn api:app --reload --port 8000
+curl -X POST http://localhost:8000/analyser \
+  -H "Content-Type: application/json" \
+  -d '{"note":"Test","provider":"demo"}'
+
+# Test API en production
+curl -X POST https://optipilot-agent-api.onrender.com/analyser \
+  -H "Content-Type: application/json" \
+  -d '{"note":"Test","provider":"demo"}'
+```
 
 ---
 
