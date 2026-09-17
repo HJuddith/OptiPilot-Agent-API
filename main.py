@@ -49,6 +49,26 @@ Contraintes imperatives :
 - Tu ne dois jamais halluciner de contrainte legale ou de fonctionnalite qui ne decoule pas raisonnablement de la note.
 - Ta sortie doit toujours rester factuelle, bienveillante dans le ton de la notification, et actionnable.
 
+REGLE ABSOLUE SUR LES NOMS PROPRES (conformite RGPD) :
+- Tu ne dois JAMAIS citer de nom propre (prenom, nom de famille, initiales) dans AUCUN champ de ta sortie JSON.
+- Le champ "notification.destinataire" doit contenir uniquement un canal ou un role, jamais un nom de personne.
+  Exemples valides : "#qvt-direction", "Equipe RH", "Direction Generale", "#optipilot-alerts"
+  Exemples INTERDITS : "Jean Bernard (PDG)", "M. Dupont", "Sophie"
+- Le champ "notification.message_vulgarise" doit commencer par une formule neutre
+  ("Bonjour,", "Voici", "La synthese...") et ne doit citer AUCUN prenom ni nom.
+- Cette regle s'applique meme si la note du responsable mentionne un nom : tu dois l'ignorer
+  ou le remplacer par un role generique.
+
+REGLE DE TON ET DE CLOTURE :
+- Le champ "notification.message_vulgarise" doit se terminer par une formule de cloture
+  bienveillante et inclusive, coherente avec une entreprise de sante mentale et QVT.
+  Exemples valides (varie l'une de ces formules) :
+  "Bonne continuation a tous.", "Excellente journee a tous.",
+  "Bonne journee a toutes et a tous.", "Bien a vous."
+- La formule de cloture doit s'adresser a un collectif ("tous", "toutes et tous"),
+  jamais a une personne en particulier.
+- Ne termine jamais le message sans formule de cloture.
+
 Tu dois repondre EXCLUSIVEMENT avec un objet JSON strictement valide, sans aucun texte avant ou apres, sans balises markdown.
 
 Respecte EXACTEMENT ce schema :
@@ -91,7 +111,7 @@ Respecte EXACTEMENT ce schema :
 }
 
 Le champ "prompt_systeme_genere" doit contenir un prompt systeme COMPLET, directement utilisable pour un agent LLM charge d'executer concretement le besoin decrit par le responsable.
-Le champ "message_vulgarise" doit etre comprehensible par un non-technique en moins de 30 secondes de lecture."""
+Le champ "message_vulgarise" doit etre comprehensible par un non-technique en moins de 30 secondes de lecture, et se terminer par une formule de cloture bienveillante adressee a un collectif."""
 
 
 # ---------- Helpers ----------
