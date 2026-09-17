@@ -64,7 +64,7 @@
     "canal": "Slack",
     "destinataire": "#qvt-direction",
     "titre": "Synthese Audit QVT prete a valider",
-    "message_vulgarise": "Bonjour,\n\nLa synthese anonymisee de l'audit QVT par pole est prete pour le Codex. Aucun nom ne sort nulle part, tout a ete verifie. \n\nVous pouvez valider directement ci-dessous, ou demander une relecture RH avant diffusion.\n\nBonne continuation a tous.",
+    "message_vulgarise": "Bonjour,\n\nLa synthese anonymisee de l'audit QVT par pole est prete pour le Codex. Aucun nom ne sort nulle part, tout a ete verifie. \n\nVous pouvez valider directement ci-dessous, ou demander une relecture RH avant diffusion.",
     "actions_proposees": [
       {
         "label": "Valider pour le Codex",

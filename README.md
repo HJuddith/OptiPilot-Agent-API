@@ -3,9 +3,17 @@
 **L'agent qui transforme une note vocale d'un responsable en cahier des charges Ops exploitable — en quelques secondes, pas en quelques jours.**
 Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack / Google Sheets.
 
-🔗 **Démo interactive :** [Swagger UI](https://optipilot-agent-api.onrender.com/docs) · **Code :** [dépôt GitHub](https://github.com/HJuddith/OptiPilot-Agent)
+🔗 **Démo interactive :**
 
-![Aperçu](assets/ApiScreenshot.JPG)
+### **Agent-API déployé :** [OptiPilot-Agent API](https://optipilot-agent-api.onrender.com/docs) ·
+
+### **Code :** [dépôt GitHub](https://github.com/HJuddith/OptiPilot-Agent)
+
+### **Automatisation :** [Workflow Make](https://eu1.make.com/public/shared-scenario/oJmiTsAxSTd/opti-pilot-agent)
+
+### **Base historique :** [Google Sheets](https://docs.google.com/spreadsheets/d/14hZJsGDaJTAQZ6JnFPJCkfN4uXfCMMMMYipmG--CZeM/edit?gid=0#gid=0)
+
+![Aperçu](assets/MakeWorkflow.JPG)
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Groq](https://img.shields.io/badge/LLM-Groq%20%7C%20GPT--OSS%20120B-f55036)
@@ -309,10 +317,10 @@ sur les 5 pôles (Sales, Marketing, Ops, RH, Finance) sans réécrire l'orchestr
 - [x] Déploiement Render (free tier)
 - [x] Détection RGPD native dans le prompt système
 - [x] Sécurisation de l'API (limites, path traversal, erreurs génériques)
+- [x] Workflow Make : Slack + Google Sheets de bout en bout
 
 ### 🚧 En cours
 
-- [ ] Workflow Make : Slack + Google Sheets de bout en bout
 - [ ] Boutons Slack réellement interactifs (Slack Interactivity + endpoint `/actions`)
 - [ ] Transcription vocale automatique (Whisper) en entrée
 
