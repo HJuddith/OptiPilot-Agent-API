@@ -5,13 +5,19 @@ Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack / Goog
 
 🔗 **Démo interactive :**
 
-### **Agent-API déployé :** [OptiPilot-Agent API](https://optipilot-agent-api.onrender.com/docs) ·
+### Démo live : [Tester le formulaire OptiPilot](https://tally.so/r/yPODX4)
 
-### **Code :** [dépôt GitHub](https://github.com/HJuddith/OptiPilot-Agent)
+### Agent-API déployé : [OptiPilot-Agent API](https://optipilot-agent-api.onrender.com/docs)
 
-### **Automatisation :** [Workflow Make](https://eu1.make.com/public/shared-scenario/oJmiTsAxSTd/opti-pilot-agent)
+### Code : [dépôt GitHub](https://github.com/HJuddith/OptiPilot-Agent)
 
-### **Base historique :** [Google Sheets](https://docs.google.com/spreadsheets/d/14hZJsGDaJTAQZ6JnFPJCkfN4uXfCMMMMYipmG--CZeM/edit?gid=0#gid=0)
+### Automatisation : [Workflow Make](https://eu1.make.com/public/shared-scenario/oJmiTsAxSTd/opti-pilot-agent)
+
+📖 [Documentation complète du workflow Make](docs/WORKFLOW_MAKE.md)
+
+### Distribution : [Canal Slack](https://app.slack.com/client/T07KV2SSAE6/C0C2K1L8FHT)
+
+### Base historique : [Google Sheets](https://docs.google.com/spreadsheets/d/14hZJsGDaJTAQZ6JnFPJCkfN4uXfCMMMMYipmG--CZeM/edit?gid=0#gid=0)
 
 ![Aperçu](assets/MakeWorkflow.JPG)
 
@@ -112,15 +118,35 @@ RGPD propres à une entreprise de santé mentale / QVT.**
 ## 🔄 Le workflow sur Make
 
 ```
-[Note du responsable / Webhook]
-       ↓
-[Module HTTP : POST /analyser sur Render]
-       ↓
-[Module JSON : Parse de la réponse]
-       ↓
- ┌─────┴──────────────────────────────────┐
- ↓                                        ↓
-[Slack : Poster le message vulgarisé]   [Google Sheets : Archiver l'analyse]
+┌──────────────────────────────┐
+│  Utilisateur (responsable)   │
+│  Remplit le formulaire Tally │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│  Tally                       │
+│  Envoie les données à Make   │
+└───────────────┬──────────────┘
+                │  webhook
+                ▼
+┌──────────────────────────────┐
+│  Make — Module HTTP          │
+│  POST /analyser              │
+└───────────────┬──────────────┘
+                │  appel HTTP
+                ▼
+┌──────────────────────────────┐
+│  API FastAPI sur Render      │
+│  https://optipilot-agent-    │
+│  api.onrender.com/analyser   │
+└───────────────┬──────────────┘
+                │  JSON
+                ▼
+┌──────────────────────────────┐
+│  Make — JSON Parse (envoie)  │
+│  → Slack + Google Sheets     │
+└──────────────────────────────┘
 ```
 
 Le workflow est **duplicable sur les 5 pôles** (Sales, Marketing, Ops, RH, Finance) sans
@@ -312,12 +338,16 @@ sur les 5 pôles (Sales, Marketing, Ops, RH, Finance) sans réécrire l'orchestr
 
 ### ✅ Déjà livré
 
-- [x] CLI `main.py` (providers demo / groq / mistral)
-- [x] API FastAPI exposée en webhook (`POST /analyser`)
+- [x] CLI `main.py` — providers `demo` / `groq` / `mistral`
+- [x] API FastAPI (`POST /analyser`) exposée en webhook
 - [x] Déploiement Render (free tier)
-- [x] Détection RGPD native dans le prompt système
+- [x] Prompt système strict avec détection RGPD native
+- [x] Règle anti-noms propres (conformité RGPD)
 - [x] Sécurisation de l'API (limites, path traversal, erreurs génériques)
-- [x] Workflow Make : Slack + Google Sheets de bout en bout
+- [x] Workflow Make : Tally → HTTP → JSON Parse → Slack → Google Sheets
+- [x] Création de formulaire sur Tally : formulaire utilisable par des profils non-tech
+- [x] Notification Slack vulgarisée avec actions proposées et formule de clôture
+- [x] Archivage automatique des directives dans Google Sheets
 
 ### 🚧 En cours
 
