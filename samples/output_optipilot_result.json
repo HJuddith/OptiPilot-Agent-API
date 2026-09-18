@@ -2,9 +2,11 @@
   "meta": {
     "agent": "OptiPilot-Agent",
     "version": "1.0.0",
-    "input_source": "note_vocale_dg",
+    "input_source": "note_vocale_responsable",
     "processed_at": "2026-03-14T08:47:12+01:00",
-    "provider": "openai/gpt-oss-120b"
+    "provider": "openai/gpt-oss-120b",
+    "profil_destinataire": "RH",
+    "niveau_technicite": "non_technique"
   },
   "strategic_analysis": {
     "pole_cible": "RH / QVT",
@@ -13,58 +15,57 @@
       "Direction Generale"
     ],
     "urgence": "Haute",
-    "urgence_justification": "Deadline fixe (Codex dans 3 semaines) et dependance a la disponibilite RH.",
+    "urgence_justification": "Deadline fixe : Codex dans 3 semaines et disponibilite limitee de l'equipe RH.",
     "complexite_technique": "Moyenne",
-    "complexite_justification": "Necessite un pipeline d'anonymisation fiable avant toute analyse, mais pas de developpement d'infrastructure lourde.",
-    "gain_temps_estime": "Env. 15 a 20h de relecture manuelle RH economisees",
+    "complexite_justification": "Necessite une anonymisation fiable avant toute analyse des verbatims.",
+    "gain_temps_estime": "Non precise",
     "risques_identifies": [
       {
         "type": "RGPD",
         "niveau": "Eleve",
-        "description": "Les verbatims contiennent des noms de collaborateurs en commentaire libre. Toute analyse doit etre precedee d'une anonymisation stricte, y compris dans les fichiers de travail internes."
+        "description": "Les verbatims peuvent contenir des noms de collaborateurs. Toute analyse doit etre precedee d'une anonymisation stricte."
       },
       {
-        "type": "Donnee sensible sante/QVT",
+        "type": "Donnees sensibles sante/QVT",
         "niveau": "Eleve",
-        "description": "Les donnees d'audit QVT relevent d'un champ sensible ; seules des syntheses agregees par pole doivent etre diffusees, jamais de verbatim individuel identifiable."
+        "description": "Les donnees QVT peuvent contenir des informations sensibles. Seules des syntheses agregees doivent etre diffusees."
       }
     ]
   },
   "cahier_des_charges_technique": {
-    "objectif": "Produire une synthese agregee et anonymisee des resultats de l'audit QVT, restituee par pole, exploitable en Codex.",
+    "objectif": "Produire une synthese agregee et anonymisee des resultats de l'audit QVT, restituee par pole.",
     "inputs": [
-      "Export Google Sheets des verbatims bruts de l'audit QVT (colonnes: pole, commentaire libre, date)",
-      "Liste des collaborateurs (pour reconnaissance et suppression des noms cites en commentaire libre)"
+      "Export Google Sheets des verbatims bruts de l'audit QVT",
+      "Liste des collaborateurs pour faciliter la detection des noms cites dans les commentaires"
     ],
     "processing": [
-      "Etape 1 - Anonymisation : detection et remplacement de tout nom propre / identifiant direct dans les commentaires libres (avant tout envoi a un LLM).",
-      "Etape 2 - Agregation par pole : regroupement des verbatims anonymises par pole d'origine.",
-      "Etape 3 - Synthese thematique : extraction des themes recurrents par pole (charge de travail, outillage, management, etc.).",
-      "Etape 4 - Generation du rapport de synthese Codex, format court, sans verbatim brut."
+      "Anonymisation des commentaires avant toute analyse par un LLM.",
+      "Agregation des verbatims anonymises par pole.",
+      "Identification des themes recurrents par pole.",
+      "Generation d'une synthese courte sans verbatim brut."
     ],
     "outputs": [
-      "Document de synthese par pole (1 page max par pole), 100% anonymise",
-      "Fichier de log d'anonymisation (nombre d'occurrences supprimees, pour audit interne)",
-      "Notification Slack de validation avant diffusion au Codex"
+      "Document de synthese par pole anonymise",
+      "Log d'anonymisation pour assurer la tracabilite",
+      "Notification Slack de validation"
     ],
     "contraintes": [
-      "Aucun nom de collaborateur ne doit apparaitre, y compris dans les fichiers de travail intermediaires.",
-      "Le traitement doit rester tracable et auditable (log d'anonymisation).",
-      "Livrable pret avant J-3 par rapport a la date du Codex.",
-      "Validation humaine (DG et/ou RH) obligatoire avant diffusion, meme apres anonymisation automatique."
+      "Aucun nom de collaborateur ne doit apparaitre dans les donnees transmises au LLM.",
+      "Le traitement doit rester tracable et auditable.",
+      "Le livrable doit etre prepare avant le Codex.",
+      "Une validation humaine est obligatoire avant diffusion."
     ],
     "jalons": [
-      "J+2 : script d'anonymisation teste sur echantillon",
-      "J+7 : synthese par pole generee et relue par RH",
-      "J-3 avant Codex : validation finale DG"
+      "La note indique une echeance de 3 semaines pour le Codex.",
+      "Les autres dates de realisation ne sont pas precisees."
     ]
   },
-  "prompt_systeme_genere": "Tu es un agent d'analyse QVT anonymisee pour Qualisocial. Tu recois exclusivement des verbatims deja anonymises (aucun nom propre ne doit apparaitre dans ton input ; si tu en detectes un, tu dois le signaler et refuser de le traiter tel quel). Ta mission : regrouper les verbatims par pole fourni en metadonnee, identifier les 3 a 5 themes recurrents par pole, et produire une synthese factuelle, neutre et bienveillante, sans jamais citer un verbatim en entier ni un detail permettant de reidentifier un individu. Reponds uniquement en JSON strict avec le schema suivant : {\"pole\": string, \"themes\": [{\"theme\": string, \"frequence_relative\": string, \"synthese\": string}], \"alerte_reidentification\": boolean}. N'ajoute aucun texte hors de ce JSON.",
+  "prompt_systeme_genere": "Tu es un agent d'analyse QVT anonymisee. Tu recois exclusivement des donnees deja anonymisees. Si tu detectes un nom propre ou un identifiant permettant potentiellement de reidentifier une personne, signale-le et ne traite pas la donnee telle quelle. Ta mission est de regrouper les donnees par pole, d'identifier les themes recurrents et de produire une synthese factuelle, neutre et bienveillante. Ne cite jamais un verbatim complet et n'ajoute aucun detail permettant de reidentifier une personne. Reponds uniquement en JSON strict. Le JSON doit contenir les champs suivants : pole (texte), themes (liste d'objets contenant theme, frequence_relative et synthese, tous sous forme de texte) et alerte_reidentification (booleen). N'ajoute aucun texte hors de ce JSON.",
   "notification": {
     "canal": "Slack",
     "destinataire": "#qvt-direction",
     "titre": "Synthese Audit QVT prete a valider",
-    "message_vulgarise": "Bonjour,\n\nLa synthese anonymisee de l'audit QVT par pole est prete pour le Codex. Aucun nom ne sort nulle part, tout a ete verifie. \n\nVous pouvez valider directement ci-dessous, ou demander une relecture RH avant diffusion.",
+    "message_vulgarise": "Bonjour,\n\nLa synthese anonymisee de l'audit QVT par pole est prete pour validation.\n\nVous pouvez consulter la synthese ci-dessus et, lorsque les interactions seront activees, choisir l'action souhaitee.",
     "actions_proposees": [
       {
         "label": "Valider pour le Codex",
