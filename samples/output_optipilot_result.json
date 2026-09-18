@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "input_source": "note_vocale_dg",
     "processed_at": "2026-03-14T08:47:12+01:00",
-    "provider": "claude-sonnet-5"
+    "provider": "openai/gpt-oss-120b"
   },
   "strategic_analysis": {
     "pole_cible": "RH / QVT",

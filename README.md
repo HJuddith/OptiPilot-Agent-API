@@ -13,7 +13,7 @@ Le workflow relie une note d'un responsable → OptiPilot-Agent → Slack / Goog
 
 ### Automatisation : [Workflow Make](https://eu1.make.com/public/shared-scenario/oJmiTsAxSTd/opti-pilot-agent)
 
-📖 [Documentation complète du workflow Make](docs/WORKFLOW_MAKE.md)
+#### 📖 Documentation complète des scénarios : [Workflow Make](docs/WORKFLOW_MAKE.md)
 
 ### Distribution : [Canal Slack](https://app.slack.com/client/T07KV2SSAE6/C0C2K1L8FHT)
 
@@ -334,7 +334,10 @@ sur les 5 pôles (Sales, Marketing, Ops, RH, Finance) sans réécrire l'orchestr
 
 ---
 
-## 🗺️ Roadmap
+## ⚠️ Limites assumées & roadmap
+
+Ce Proof of Concept valide la chaîne complète d'orchestration. Certains éléments restent
+volontairement hors scope pour ne pas sur-complexifier la démo :
 
 ### ✅ Déjà livré
 
@@ -345,14 +348,19 @@ sur les 5 pôles (Sales, Marketing, Ops, RH, Finance) sans réécrire l'orchestr
 - [x] Règle anti-noms propres (conformité RGPD)
 - [x] Sécurisation de l'API (limites, path traversal, erreurs génériques)
 - [x] Workflow Make : Tally → HTTP → JSON Parse → Slack → Google Sheets
-- [x] Création de formulaire sur Tally : formulaire utilisable par des profils non-tech
+- [x] Formulaire Tally utilisable par des profils non-tech
 - [x] Notification Slack vulgarisée avec actions proposées et formule de clôture
 - [x] Archivage automatique des directives dans Google Sheets
 
-### 🚧 En cours
+### 🚧 En cours — Limites assumées du PoC
 
-- [ ] Boutons Slack réellement interactifs (Slack Interactivity + endpoint `/actions`)
-- [ ] Transcription vocale automatique (Whisper) en entrée
+| Limite                               | Raison                                                                                    |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- |
+| **Boutons Slack non interactifs**    | Nécessite une Slack App complète (Interactivity + endpoint `/actions`), hors scope du PoC |
+| **Pas de transcription vocale**      | Le PoC prend du texte en entrée. Whisper serait la prochaine brique                       |
+| **Anonymisation côté LLM seulement** | Pas de NER local en amont                                                                 |
+| **Mono-tenant**                      | Un seul canal Slack, un seul Google Sheet                                                 |
+| **Cold start Render (free tier)**    | 30-60 s après inactivité — limite plateforme                                              |
 
 ### 🔮 Au-delà du PoC
 
