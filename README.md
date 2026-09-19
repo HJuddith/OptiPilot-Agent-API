@@ -77,14 +77,8 @@ Le projet cherche ainsi à démontrer une approche **IA + automatisation + péda
 
 ```text
 ┌─────────────────────────────┐
-│        Tally                │
+│           Tally             │
 │  Formulaire de directive    │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│          Make               │
-│        Webhook              │
 └──────────────┬──────────────┘
                │
                ▼
@@ -93,9 +87,9 @@ Le projet cherche ainsi à démontrer une approche **IA + automatisation + péda
 │                             │
 │  • Prompt système           │
 │  • Appel LLM                │
-│  • Parsing JSON              │
-│  • Validation                │
-│  • Normalisation Slack       │
+│  • Parsing JSON             │
+│  • Validation               │
+│  • Normalisation Slack      │
 └──────────────┬──────────────┘
                │
                │ JSON structuré
@@ -105,13 +99,21 @@ Le projet cherche ainsi à démontrer une approche **IA + automatisation + péda
 │       JSON Parse            │
 └──────────────┬──────────────┘
                │
-        ┌──────┴──────┐
-        ▼             ▼
-┌──────────────┐ ┌────────────────┐
-│    Slack     │ │ Google Sheets  │
-│ Restitution  │ │    Suivi       │
-│ + actions    │ │   historique   │
-└──────────────┘ └────────────────┘
+               │
+               ▼
+        ┌──────────────┐
+        │    Slack     │
+        │ Restitution  │ Distribution (Synthèse avec des boutons et generation de pdf par profil_destinataire)
+        │ + actions    │
+        └──────────────┘
+               │
+               │ Mise à jour des données
+               ▼
+        ┌────────────────┐
+        │ Google Sheets  │
+        │    Suivi       │
+        │   historique   │
+        └────────────────┘
 ```
 
 L'API FastAPI constitue le point d'entrée HTTP utilisé par Make.
@@ -141,14 +143,15 @@ OptiPilot-Agent API
      ▼
  JSON Parse
      │
-     ├───────────────► Slack
-     │                  │
-     │                  ├── Synthèse
-     │                  └── Boutons visuels
      │
-     └───────────────► Google Sheets
-                        │
-                        └── Suivi de la demande
+     ▼
+    Slack ───────────────►
+     │                   │
+     │                   ├── Synthèse et generation de pdf par profil_destinataire
+     │                   └── Boutons visuels
+     ▼
+Google Sheets───────────────► Suivi de la demande
+
 ```
 
 ### Slack
